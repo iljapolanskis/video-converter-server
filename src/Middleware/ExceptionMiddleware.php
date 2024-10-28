@@ -54,13 +54,13 @@ final class ExceptionMiddleware implements MiddlewareInterface
         if (isset($this->logger)) {
             $this->logger->error(
                 sprintf(
-                    '%s;Code %s;File: %s;Line: %s',
+                    '%s; Code %s; File: %s; Line: %s; Traceback:' . PHP_EOL . '%s',
                     $exception->getMessage(),
                     $exception->getCode(),
                     $exception->getFile(),
-                    $exception->getLine()
+                    $exception->getLine(),
+                    $exception->getTraceAsString()
                 ),
-                $exception->getTrace()
             );
         }
 

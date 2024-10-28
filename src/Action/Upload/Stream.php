@@ -8,23 +8,23 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final readonly class Stream
 {
+    public const string HEADER_FILE_ID = 'X-File-ID';
+    public const string HEADER_FILE_NAME = 'X-File-Name';
+    public const string HEADER_FILE_SIZE = 'X-File-Size';
+
     public function __construct(
         private CompressQueue $queue
     ) {
     }
 
-    public const string HEADER_FILE_ID = 'X-File-ID';
-    public const string HEADER_FILE_NAME = 'X-File-Name';
-    public const string HEADER_FILE_SIZE = 'X-File-Size';
-
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         if (!is_dir(APP_UPLOAD_DIR)) {
-            mkdir(APP_UPLOAD_DIR, 0777, true);
+            mkdir(APP_UPLOAD_DIR, 0755, true);
         }
 
         if (!is_dir(APP_CHUNKS_DIR)) {
-            mkdir(APP_CHUNKS_DIR, 0777, true);
+            mkdir(APP_CHUNKS_DIR, 0755, true);
         }
 
         $contentRange = $request->getHeaderLine('Content-Range');

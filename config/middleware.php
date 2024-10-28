@@ -1,12 +1,11 @@
 <?php
 
-use App\Middleware\ExceptionMiddleware;
-use Selective\BasePath\BasePathMiddleware;
+use Psr\Log\LoggerInterface;
 use Slim\App;
 
 return function (App $app) {
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
-    $app->add(BasePathMiddleware::class);
-    $app->add(ExceptionMiddleware::class);
+    $logger = $app->getContainer()->get(LoggerInterface::class);
+    $app->addErrorMiddleware(true, true, true, $logger);
 };
