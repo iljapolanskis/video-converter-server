@@ -17,6 +17,6 @@ final readonly class PingAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $jobs = $this->orm->getConnection()->executeQuery('SELECT * FROM enqueue')->fetchAllAssociative();
-        return $this->renderer->json($response, ['success' => true, 'jobs' => $jobs]);
+        return $this->renderer->json($response, ['success' => true, 'jobs' => []]);
     }
 }

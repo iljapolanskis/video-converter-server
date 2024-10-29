@@ -9,7 +9,7 @@
 
     <div class="mt-4 w-fit m-auto space-y-4">
         {% for job in jobs %}
-            {% include 'component/progress-bar.twig' with {label: job.filename, progress: job.progress} %}
+            {% include 'component/progress-bar.twig' with {label: job.id, progress: job.progress} %}
         {% endfor %}
     </div>
 {% endblock %}
