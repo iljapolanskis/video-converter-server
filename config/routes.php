@@ -10,4 +10,8 @@ return function (App $app) {
     $app->post('/upload/stream', \App\Action\Upload\Stream::class);
     $app->get('/download/compressed', \App\Action\Download\Compressed::class);
     $app->get('/download/once', \App\Action\Download\Compressed::class);
+
+    $app->group('/dashboard', function ($app) {
+        $app->get('/overview', \App\Action\Dashboard\Overview::class);
+    });
 };

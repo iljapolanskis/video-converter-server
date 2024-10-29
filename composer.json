@@ -17,7 +17,8 @@
         "nyholm/psr7-server": "^1.1",
         "php-di/php-di": "^7",
         "php-ffmpeg/php-ffmpeg": "^1.2",
-        "slim/slim": "^4"
+        "slim/slim": "^4",
+        "slim/twig-view": "^3.4"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3",
@@ -55,6 +56,7 @@
         "test:coverage": [
             "@putenv XDEBUG_MODE=coverage",
             "phpunit --configuration phpunit.xml --do-not-cache-result --colors=always --display-warnings --display-deprecations --coverage-clover build/coverage/clover.xml --coverage-html build/coverage --coverage-text"
-        ]
+        ],
+        "tailwind-watch": "./tailwind -i ./view/css/input.css -o ./view/css/main.css --watch"
     }
 }

@@ -23,6 +23,7 @@ use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Interfaces\RouteParserInterface;
+use Slim\Views\Twig;
 
 return [
     'settings' => fn () => require __DIR__ . '/settings.php',
@@ -90,6 +91,11 @@ return [
             $container->get(LoggerInterface::class),
             (bool)$settings['display_error_details'],
         );
+    },
+
+    Twig::class => function (ContainerInterface $container) {
+        #return Twig::create(APP_TEMPLATE_DIR, ['cache' => APP_TEMPLATE_CACHE_DIR]);
+        return Twig::create(APP_TEMPLATE_DIR, []);
     },
 
     EntityManager::class => function (ContainerInterface $container) {

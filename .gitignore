@@ -65,3 +65,5 @@ public/assets/*
 /database/database.sqlite
 /docs/
 /playground.php
+/.php-cs-fixer.cache
+/tailwind
