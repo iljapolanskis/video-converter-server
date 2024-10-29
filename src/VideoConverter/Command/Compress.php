@@ -41,7 +41,7 @@ final readonly class Compress
         $format = (new X265())->on('progress', function ($video, $format, $percentage) use ($job) {
             static $lastPercentage = 0;
             if ($percentage > $lastPercentage) {
-                $this->updateProgress($job);
+                $this->updateProgress($job, (int)$percentage);
                 $lastPercentage = $percentage;
             }
         });
@@ -54,17 +54,18 @@ final readonly class Compress
 
     /**
      * @param \App\VideoConverter\Job\CompressJob $job
+     * @param int $progress
      * @return void
      */
-    private function updateProgress(CompressJob $job): void
+    private function updateProgress(CompressJob $job, int $progress): void
     {
         try {
-            $body = json_encode(['filename' => $job->filename, 'progress' => $job->progress]);
+            $body = json_encode(['filename' => $job->filename, 'progress' => $progress]);
             $this->orm->getConnection()->executeQuery('UPDATE enqueue SET body = ? WHERE id = ?', [$body, $job->id]);
         } catch (Exception $e) {
             $this->logger->error(
                 'Failed to update progress',
-                ['id' => $job->id, 'filename' => $job->filename, 'progress' => $job->progress]
+                ['id' => $job->id, 'filename' => $job->filename, 'progress' => $progress]
             );
         }
     }
