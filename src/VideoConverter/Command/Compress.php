@@ -24,10 +24,8 @@ final readonly class Compress
     ) {
     }
 
-    public function execute(Message $message): void
+    public function execute(CompressJob $job): void
     {
-        $job = $this->convertMessageToJob($message);
-
         $ffmpeg = FFMpeg::create([
             'timeout' => 0
         ]);
@@ -52,21 +50,6 @@ final readonly class Compress
         $this->logger->info("Successfully Compressed \"$job->filename\"");
 
         unlink(APP_UPLOAD_DIR . $job->filename);
-    }
-
-    private function convertMessageToJob(Message $message): CompressJob
-    {
-        $parsedBody = json_decode($message->getBody(), true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $filename = $message->getBody();
-            $progress = 0;
-        } else {
-            $filename = $parsedBody['filename'];
-            $progress = $parsedBody['progress'];
-        }
-        $job = new CompressJob(id: $message->getMessageId(), filename: $filename, progress: $progress);
-
-        return $job;
     }
 
     /**
