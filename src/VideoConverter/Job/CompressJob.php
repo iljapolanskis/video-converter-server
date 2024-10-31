@@ -2,7 +2,7 @@
 
 namespace App\VideoConverter\Job;
 
-use App\Util\DtoTrait;
+use App\Util\Model\DtoTrait;
 
 final readonly class CompressJob
 {
