@@ -2,6 +2,7 @@
 
 use App\Middleware\ExceptionMiddleware;
 use App\Renderer\JsonRenderer;
+use App\Util\Twig\CustomFunctions;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -95,7 +96,12 @@ return [
 
     Twig::class => function (ContainerInterface $container) {
         #return Twig::create(APP_TEMPLATE_DIR, ['cache' => APP_TEMPLATE_CACHE_DIR]);
-        return Twig::create(APP_TEMPLATE_DIR, []);
+
+        $twig = Twig::create(APP_TEMPLATE_DIR, []);
+
+        $twig->addExtension(new CustomFunctions());
+
+        return $twig;
     },
 
     EntityManager::class => function (ContainerInterface $container) {

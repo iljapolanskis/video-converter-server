@@ -13,7 +13,6 @@ use FFMpeg\FFMpeg;
 use FFMpeg\Filters\Audio\SimpleFilter;
 use FFMpeg\Filters\Video\ResizeFilter;
 use FFMpeg\Filters\Video\SynchronizeFilter;
-use Interop\Queue\Message;
 use Psr\Log\LoggerInterface;
 
 final readonly class Compress

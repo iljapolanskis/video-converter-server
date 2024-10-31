@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>{% block title %}Captain-PHP{% endblock %}</title>
-    <link rel="stylesheet" href="/view/css/main.css">
+    <link rel="stylesheet" href="{{ css('main.css') }}">
 </head>
 <body class="dark:bg-gray-700 dark:text-white">
     {% block content %}{% endblock %}
