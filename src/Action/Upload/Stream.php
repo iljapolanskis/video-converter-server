@@ -40,6 +40,7 @@ final readonly class Stream
         $uploadId = $request->getHeaderLine(self::HEADER_FILE_ID);
         $fileSize = (int)$request->getHeaderLine(self::HEADER_FILE_SIZE);
 
+        // TODO: Make it one time check for each upload & make it global, so it works across multiple uploads
         if (disk_free_space(APP_UPLOAD_DIR) < $fileSize + (1024 * 1024)) {
             $response->getBody()->write('Not enough free space on server');
             return $response->withStatus(500);

@@ -2,6 +2,8 @@
 
 use App\Middleware\ExceptionMiddleware;
 use App\Renderer\JsonRenderer;
+use App\Util\Events\Api\EventDispatcher;
+use App\Util\Events\Api\EventListener;
 use App\Util\Twig\CustomFunctions;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -9,11 +11,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Enqueue\Dbal\DbalConnectionFactory;
 use Interop\Queue\Context;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Container\ContainerInterface;
+use App\Util\Events\EventDispatcherImpl;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -61,26 +62,18 @@ return [
         return $container->get(App::class)->getRouteCollector()->getRouteParser();
     },
 
-    BasePathMiddleware::class => function (ContainerInterface $container) {
-        return new BasePathMiddleware($container->get(App::class));
-    },
-
     LoggerInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings')['logger'];
         $logger = new Logger('app');
 
         $filename = sprintf('%s/app.log', $settings['path']);
         $level = $settings['level'];
-        $rotatingFileHandler = new RotatingFileHandler($filename, 0, $level, true, 0777);
-        $rotatingFileHandler->setFormatter(new LineFormatter(null, null, false, true));
-        $logger->pushHandler($rotatingFileHandler);
+
+        $fileStreamHandler = new \Monolog\Handler\StreamHandler($filename, $level, true, 0644);
+
+        $logger->pushHandler($fileStreamHandler);
 
         return $logger;
-    },
-
-    Connection::class => function (ContainerInterface $container) {
-        $config = $container->get('settings')['doctrine'];
-        return DriverManager::getConnection($config['connection']);
     },
 
     ExceptionMiddleware::class => function (ContainerInterface $container) {
@@ -95,13 +88,16 @@ return [
     },
 
     Twig::class => function (ContainerInterface $container) {
-        #return Twig::create(APP_TEMPLATE_DIR, ['cache' => APP_TEMPLATE_CACHE_DIR]);
-
         $twig = Twig::create(APP_TEMPLATE_DIR, []);
 
         $twig->addExtension(new CustomFunctions());
 
         return $twig;
+    },
+
+    Connection::class => function (ContainerInterface $container) {
+        $config = $container->get('settings')['doctrine'];
+        return DriverManager::getConnection($config['connection']);
     },
 
     EntityManager::class => function (ContainerInterface $container) {
@@ -125,5 +121,27 @@ return [
 
     Context::class => function (ContainerInterface $container) {
         return $container->get(DbalConnectionFactory::class)->createContext();
-    }
+    },
+
+    EventDispatcher::class => function (ContainerInterface $container) {
+        $dispatcher = $container->get(EventDispatcherImpl::class);
+
+        $events = (require __DIR__ . '/listeners.php')($container);
+
+        foreach ($events as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                if (!($listener instanceof EventListener)) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Listener for event "%s" must implement EventListenerInterface. Provided: "%s"',
+                        $event,
+                        $listener::class
+                    ));
+                }
+
+                $dispatcher->addListener($event, $listener);
+            }
+        }
+
+        return $dispatcher;
+    },
 ];

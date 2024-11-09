@@ -2,6 +2,7 @@
 
 namespace App\Action\Download;
 
+use App\Renderer\JsonRenderer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -11,11 +12,12 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class Once
 {
     public function __construct(
+        private JsonRenderer $renderer
     ) {
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        return $response;
+        return $this->renderer->json($response, ['file' => 'not_implemented_yet']);
     }
 }

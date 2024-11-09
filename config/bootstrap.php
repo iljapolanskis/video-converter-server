@@ -3,13 +3,13 @@
 use DI\ContainerBuilder;
 use Slim\App;
 
-// APP Constants
 const APP_BASE_PATH = __DIR__ . '/../';
 
 const APP_TEMP_PATH = APP_BASE_PATH . 'tmp/';
 const APP_UPLOAD_DIR = APP_TEMP_PATH . 'uploads/';
 const APP_CHUNKS_DIR = APP_TEMP_PATH . 'chunks/';
 const APP_COMPRESSED_DIR = APP_TEMP_PATH . 'compressed/';
+const APP_READY_DIR = APP_TEMP_PATH . 'ready/';
 
 const APP_DB_DIR = APP_BASE_PATH . 'database/';
 const APP_DB_CACHE_DIR = APP_DB_DIR . 'cache/';

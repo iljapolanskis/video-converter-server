@@ -14,13 +14,10 @@ final readonly class Compressed
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $files = scandir(APP_COMPRESSED_DIR);
-
-        $files = array_filter($files, fn ($file) => is_file(APP_COMPRESSED_DIR . $file));
+        // $files = scandir(APP_COMPRESSED_DIR);
+        // $files = array_filter($files, fn ($file) => is_file(APP_COMPRESSED_DIR . $file));
+        $files = ['not.mp4', 'implemented.mp4', 'yet.mp4'];
         
-        // Return list of download links
-        
-
         return $this->renderer->json($response, ['files' => $files]);
     }
 }

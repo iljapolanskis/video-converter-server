@@ -20,8 +20,7 @@ final readonly class Compress
     public function __construct(
         private LoggerInterface $logger,
         private EntityManager $orm,
-    ) {
-    }
+    ) {}
 
     public function execute(CompressJob $job): void
     {
@@ -37,7 +36,7 @@ final readonly class Compress
             '-crf', '26',
             '-preset', 'veryfast'
         ]));
-        $format = (new X265())->on('progress', function ($video, $format, $percentage) use ($job) {
+        $format = (new X265())->on('progress', function ($video, $format, $percentage) use ($job): void {
             static $lastPercentage = 0;
             if ($percentage > $lastPercentage) {
                 $this->updateProgress($job, (int)$percentage);
@@ -49,6 +48,7 @@ final readonly class Compress
         $this->logger->info("Successfully Compressed \"$job->filename\"");
 
         unlink(APP_UPLOAD_DIR . $job->filename);
+        rename(APP_COMPRESSED_DIR . $job->filename, APP_READY_DIR . $job->filename);
     }
 
     /**
