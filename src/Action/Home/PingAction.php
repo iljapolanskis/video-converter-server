@@ -2,7 +2,7 @@
 
 namespace App\Action\Home;
 
-use App\Renderer\JsonRenderer;
+use App\Util\Http\Response\JsonRenderer;
 use App\Util\Events\Api\EventDispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

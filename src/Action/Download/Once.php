@@ -2,7 +2,7 @@
 
 namespace App\Action\Download;
 
-use App\Renderer\JsonRenderer;
+use App\Util\Http\Response\JsonRenderer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

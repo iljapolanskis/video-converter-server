@@ -2,7 +2,7 @@
 
 namespace App\Middleware;
 
-use App\Renderer\JsonRenderer;
+use App\Util\Http\Response\JsonRenderer;
 use DomainException;
 use Fig\Http\Message\StatusCodeInterface;
 use InvalidArgumentException;

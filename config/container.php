@@ -1,7 +1,7 @@
 <?php
 
 use App\Middleware\ExceptionMiddleware;
-use App\Renderer\JsonRenderer;
+use App\Util\Http\Response\JsonRenderer;
 use App\Util\Events\Api\EventDispatcher;
 use App\Util\Events\Api\EventListener;
 use App\Util\Twig\CustomFunctions;
