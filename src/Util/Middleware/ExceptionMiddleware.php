@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware;
+namespace App\Util\Middleware;
 
 use App\Util\Http\Response\JsonRenderer;
 use DomainException;

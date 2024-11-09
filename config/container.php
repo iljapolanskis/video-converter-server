@@ -1,6 +1,6 @@
 <?php
 
-use App\Middleware\ExceptionMiddleware;
+use App\Util\Middleware\ExceptionMiddleware;
 use App\Util\Http\Response\JsonRenderer;
 use App\Util\Events\Api\EventDispatcher;
 use App\Util\Events\Api\EventListener;
